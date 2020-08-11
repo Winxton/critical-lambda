@@ -359,17 +359,34 @@ async function fetch(uri, options = {}, secure = true) {
   }
 }
 
+function matchesCssHref(href, ignoreCssFiles) {
+  if (!ignoreCssFiles) {
+    return false;
+  }
+
+  for (const ignoredCss of ignoreCssFiles) {
+    if (href.match(ignoredCss))  {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 /**
  * Extract stylesheet urls from html document
  * @param {Vinyl} file Vinyl file object (document)
  * @returns {[string]} Stylesheet urls from document source
  */
-function getStylesheetHrefs(file) {
+function getStylesheetHrefs(file, options) {
   if (!isVinyl(file)) {
     throw new Error('Parameter file needs to be a vinyl object');
   }
 
-  const stylesheets = oust.raw(file.contents.toString(), 'stylesheets');
+  const { ignoreCssFiles } = options;
+  const stylesheets = oust.raw(file.contents.toString(), 'stylesheets').filter(
+    stylesheet => !matchesCssHref(stylesheet.value, ignoreCssFiles));
+
   const preloads = oust.raw(file.contents.toString(), 'preload');
 
   return [...stylesheets, ...preloads]
@@ -854,7 +871,7 @@ async function getDocument(filepath, options = {}) {
 
   const document = await vinylize({filepath}, options);
 
-  document.stylesheets = await getStylesheetHrefs(document);
+  document.stylesheets = await getStylesheetHrefs(document, options);
   document.virtualPath = rebase.to || (await getDocumentPath(document, options));
 
   document.cwd = base || process.cwd();
@@ -890,7 +907,7 @@ async function getDocumentFromSource(html, options = {}) {
   const {rebase = {}, base} = options;
   const document = await vinylize({html}, options);
 
-  document.stylesheets = await getStylesheetHrefs(document);
+  document.stylesheets = await getStylesheetHrefs(document, options);
   document.virtualPath = rebase.to || (await getDocumentPath(document, options));
   document.cwd = base || process.cwd();
 
