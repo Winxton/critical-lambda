@@ -1,10 +1,13 @@
 {
-  "name": "critical",
+  "name": "@rvere/critical",
   "version": "3.0.0",
   "description": "Extract & Inline Critical-path CSS from HTML",
-  "author": "Addy Osmani",
+  "author": "Winxton",
   "license": "Apache-2.0",
-  "repository": "addyosmani/critical",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winxton/critical.git"
+  },
   "scripts": {
     "jest": "jest --coverage",
     "xo": "xo",
