@@ -402,7 +402,6 @@ async function getStylesheetHrefs(file, options) {
             .map(relativeUrl => new URL(relativeUrl, url).href)
   
       } catch (err) {
-        console.log(err)
         return []
       }
     })
