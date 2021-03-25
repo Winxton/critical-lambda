@@ -36,9 +36,22 @@ async function reduceAsync(initial, array = [], reducer = (r) => r) {
   return initial;
 }
 
+async function asyncFlatMap (arr, asyncFn) {
+  return Promise.all(flatten(await asyncMap(arr, asyncFn)))
+}
+
+function asyncMap (arr, asyncFn) {
+  return Promise.all(arr.map(asyncFn))
+}
+
+function flatten (arr) {
+  return [].concat(...arr)
+}
+
 module.exports = {
   mapAsync,
   forEachAsync,
   filterAsync,
   reduceAsync,
+  asyncFlatMap
 };

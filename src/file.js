@@ -19,7 +19,7 @@ const parseCssUrls = require('css-url-parser');
 const tempy = require('tempy');
 const slash = require('slash');
 const debug = require('debug')('critical:file');
-const {mapAsync, filterAsync, reduceAsync, forEachAsync} = require('./array');
+const {mapAsync, filterAsync, reduceAsync, forEachAsync, asyncFlatMap} = require('./array');
 const {FileNotFoundError} = require('./errors');
 
 const BASE_WARNING = `${chalk.yellow('Warning:')} Missing base path. Consider 'base' option. https://goo.gl/PwvFVb`;
@@ -378,20 +378,39 @@ function matchesCssHref(href, ignoreCssFiles) {
  * @param {Vinyl} file Vinyl file object (document)
  * @returns {[string]} Stylesheet urls from document source
  */
-function getStylesheetHrefs(file, options) {
+async function getStylesheetHrefs(file, options) {
   if (!isVinyl(file)) {
     throw new Error('Parameter file needs to be a vinyl object');
   }
 
-  const { ignoreCssFiles } = options;
+  const { ignoreCssFiles, extractCssImports } = options;
   const stylesheets = oust.raw(file.contents.toString(), 'stylesheets').filter(
     stylesheet => !matchesCssHref(stylesheet.value, ignoreCssFiles));
 
   const preloads = oust.raw(file.contents.toString(), 'preload');
 
-  return [...stylesheets, ...preloads]
+  const urls = [...stylesheets, ...preloads]
     .filter((link) => link.$el.attr('media') !== 'print' && Boolean(link.value))
     .map((link) => link.value);
+  
+  if (extractCssImports) {
+    const extraUrls = await asyncFlatMap(urls, async url => {
+      try {
+        const contents = (await fetch(url)).toString()
+        return parseCssUrls(contents)
+            .filter(filename => filename.includes('.css'))
+            .map(relativeUrl => new URL(relativeUrl, url).href)
+  
+      } catch (err) {
+        console.log(err)
+        return []
+      }
+    })
+    
+    return urls.concat(extraUrls)
+  } else {
+    return urls
+  }
 }
 
 /**
