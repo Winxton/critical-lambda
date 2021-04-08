@@ -1,12 +1,12 @@
 {
-  "name": "@rvere/critical",
+  "name": "@rvere/critical-lambda",
   "version": "3.0.0",
   "description": "Extract & Inline Critical-path CSS from HTML",
   "author": "Winxton",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/winxton/critical.git"
+    "url": "git+https://github.com/winxton/critical-lambda.git"
   },
   "scripts": {
     "jest": "jest --coverage",
@@ -48,7 +48,7 @@
     "meow": "^9.0.0",
     "oust": "^1.0.4",
     "p-all": "^3.0.0",
-    "penthouse": "^2.3.2",
+    "@rvere/penthouse-lambda": "git+https://github.com/Winxton/penthouse.git",
     "plugin-error": "^1.0.1",
     "postcss": "^8.2.6",
     "postcss-discard": "^1.0.1",
