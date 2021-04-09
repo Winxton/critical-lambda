@@ -560,9 +560,9 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@rvere/penthouse-lambda@git+https://github.com/Winxton/penthouse.git":
-  version "2.3.2"
-  resolved "git+https://github.com/Winxton/penthouse.git#bf5fcca517abcafa64e6459d9924cdc141c26505"
+"@rvere/penthouse-lambda@git+https://github.com/Winxton/penthouse.git#2.3.3":
+  version "2.3.3"
+  resolved "git+https://github.com/Winxton/penthouse.git#968686a416cf846a0ce0a8eefa687c335c032a25"
   dependencies:
     chrome-aws-lambda "5.1.0"
     css-mediaquery "^0.1.2"

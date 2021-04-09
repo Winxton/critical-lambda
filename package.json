@@ -48,7 +48,7 @@
     "meow": "^9.0.0",
     "oust": "^1.0.4",
     "p-all": "^3.0.0",
-    "@rvere/penthouse-lambda": "git+https://github.com/Winxton/penthouse.git",
+    "@rvere/penthouse-lambda": "git+https://github.com/Winxton/penthouse.git#2.3.3",
     "plugin-error": "^1.0.1",
     "postcss": "^8.2.6",
     "postcss-discard": "^1.0.1",
